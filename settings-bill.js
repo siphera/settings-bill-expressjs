@@ -109,6 +109,17 @@ module.exports = function SettingsBill() {
         return total >= criticalLevel;
     }
 
+    function totalPriceAlert() {
+
+        if (totals.grandTotal >= warningLevel) {
+            return 'danger';
+        } else if (totals.grandTotal >= criticalLevel) {
+            return 'warning';
+        }
+        // else just return nothing  
+        return;
+    }
+
     return {
         setSettings,
         getSettings,
@@ -117,6 +128,7 @@ module.exports = function SettingsBill() {
         actionsFor,
         totals,
         hasReachedWarningLevel,
-        hasReachedCriticalLevel
+        hasReachedCriticalLevel,
+        totalPriceAlert
     }
 }
