@@ -25,7 +25,7 @@ app.get('/', function(req, res) {
 
         settings: settingsBill.getSettings(),
         totals: settingsBill.totals(),
-        totalPriceAlert: settingsBill.totalPriceAlert()
+        color: settingsBill.totalPriceAlert()
     });
 });
 
