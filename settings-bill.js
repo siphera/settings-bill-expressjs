@@ -110,9 +110,9 @@ module.exports = function SettingsBill() {
     }
 
     function totalPriceAlert() {
-        if (grandTotal >= warningLevel && grandTotal <= criticalLevel) {
+        if (grandTotal >= warningLevel) {
             return 'warning';
-        } else if (grandTotal >= criticalLevel && grandTotal <= warningLevel) {
+        } else if (grandTotal >= criticalLevel) {
             return 'danger';
         }
     }

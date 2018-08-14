@@ -98,4 +98,8 @@ describe('settings-bill', function () {
         assert.equal(true, settingsBill.hasReachedCriticalLevel());
 
     });
+
+    it('should change the class to warning when it reaches the warning level', function () {
+        const settingsBill = SettingsBill();
+    })
 });
