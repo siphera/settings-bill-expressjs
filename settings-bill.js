@@ -1,12 +1,12 @@
 module.exports = function SettingBill() {
-    var criticalLevel;
-    var warningLevel;
-    var callCost;
-    var smsCost;
+    let criticalLevel;
+    let warningLevel;
+    let callCost;
+    let smsCost;
 
-    var sms = 0.0;
-    var call = 0.0;
-    var Total = 0.0;
+    let sms = 0.0;
+    let call = 0.0;
+    let Total = 0.0;
 
     let actionList = [];
     let color = '';
@@ -50,7 +50,7 @@ module.exports = function SettingBill() {
 
     function bill_Type(costType) {
 
-        var billTypeEntered = costType;
+        let billTypeEntered = costType;
         let costPrice = 0;
 
         if (Total >= criticalLevel) {
