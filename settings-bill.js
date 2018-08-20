@@ -1,131 +1,149 @@
-module.exports = function SettingsBill() {
+module.exports = function SettingBill() {
+    var criticalLevel;
+    var warningLevel;
+    var callCost;
+    var smsCost;
 
-    let smsCost;
-    let callCost;
-    let warningLevel;
-    let criticalLevel;
+    var sms = 0.0;
+    var call = 0.0;
+    var Total = 0.0;
 
     let actionList = [];
+    let color = '';
+    let billType = '';
+    let costPrice = 0;
 
-    function setSettings(settings) {
-        smsCost = Number(settings.smsCost);
-        callCost = Number(settings.callCost);
-        warningLevel = settings.warningLevel;
-        criticalLevel = settings.criticalLevel;
+    function callPrice(call_cost) {
+        callCost = parseFloat(call_cost);
     }
 
-    function getSettings() {
-        return {
-            smsCost,
-            callCost,
-            warningLevel,
-            criticalLevel
-        }
+
+    function getCall() {
+        return callCost
     }
 
-    function recordAction(action) {
+    function smsPrice(sms_cost) {
+        smsCost = parseFloat(sms_cost);
+    }
 
-        let cost = 0;
-        if (action === 'sms') {
-            cost = smsCost;
-        } else if (action === 'call') {
-            cost = callCost;
+    function getSms() {
+        return smsCost;
+    }
+
+    function criticalL(critical_level) {
+        criticalLevel = parseFloat(critical_level);
+
+    }
+
+    function getCriticalLevel() {
+        return criticalLevel
+    }
+
+    function warningL(warning_level) {
+        warningLevel = parseFloat(warning_level);
+    }
+
+    function getWarningLevel() {
+        return warningLevel
+    }
+
+
+    function bill_Type(costType) {
+
+        var billTypeEntered = costType;
+        let costPrice = 0;
+
+        if (Total >= criticalLevel) {
+            return;
+        } else {
+
+            if (billTypeEntered === "call") {
+                call += callCost;
+                costPrice = callCost;
+            } else if (billTypeEntered === "sms") {
+                sms += smsCost;
+                costPrice = smsCost;
+            }
+
         }
 
         actionList.push({
-            type: action,
-            cost,
+            type: billTypeEntered,
+            cost: costPrice,
             timestamp: new Date()
         });
+
+        return costType;
     }
+
 
     function actions() {
         return actionList;
     }
 
-    function actionsFor(type) {
-        const filteredActions = [];
+    function actionsFor(billType) {
+        return actionList.filter((bill) => bill.type === billType);
+    }
 
-        // loop through all the entries in the action list 
-        for (let index = 0; index < actionList.length; index++) {
-            const action = actionList[index];
-            // check this is the type we are doing the total for 
-            if (action.type === type) {
-                // add the action to the list
-                filteredActions.push(action);
-            }
+    function callTotal() {
+        return call.toFixed(2);
+    }
+
+    function smsTotal() {
+        return sms.toFixed(2);
+    }
+
+    function totalCost() {
+        Total = call + sms;
+        return Total.toFixed(2);
+    }
+
+    function colorChange() {
+
+        if (Total > criticalLevel) {
+            let color = 'danger'
+            return color;
         }
-
-        return filteredActions;
-
-        // return actionList.filter((action) => action.type === type);
-    }
-
-    function getTotal(type) {
-        let total = 0;
-        // loop through all the entries in the action list 
-        for (let index = 0; index < actionList.length; index++) {
-            const action = actionList[index];
-            // check this is the type we are doing the total for 
-            if (action.type === type) {
-                // if it is add the total to the list
-                total += action.cost;
-            }
-        }
-        return total;
-
-        // the short way using reduce and arrow functions
-
-        // return actionList.reduce((total, action) => { 
-        //     let val = action.type === type ? action.cost : 0;
-        //     return total + val;
-        // }, 0);
-    }
-
-    function grandTotal() {
-        return getTotal('sms') + getTotal('call');
-    }
-
-    function totals() {
-        let smsTotal = getTotal('sms')
-        let callTotal = getTotal('call')
-        return {
-            smsTotal,
-            callTotal,
-            grandTotal: grandTotal()
+        if (Total > warningLevel) {
+            let color = 'warning'
+            return color;
         }
     }
 
-    function hasReachedWarningLevel() {
-        const total = grandTotal();
-        const reachedWarningLevel = total >= warningLevel &&
-            total < criticalLevel;
+    function resetBtn() {
 
-        return reachedWarningLevel;
-    }
+        sms = 0;
+        call = 0;
+        Total = 0;
+        criticalLevel = 0;
+        warningLevel = 0;
+        callCost = 0;
+        smsCost = 0;
 
-    function hasReachedCriticalLevel() {
-        const total = grandTotal();
-        return total >= criticalLevel;
-    }
+        actionList = [];
+        billType = '';
+        costPrice = 0;
 
-    function totalPriceAlert() {
-        if (grandTotal >= warningLevel) {
-            return 'warning';
-        } else if (grandTotal >= criticalLevel) {
-            return 'danger';
-        }
     }
 
     return {
-        setSettings,
-        getSettings,
-        recordAction,
+        bill_Type,
+        callTotal,
+        smsTotal,
+        totalCost,
+        smsPrice,
+        callPrice,
+        warningL,
+        criticalL,
+        getCall,
+        getSms,
+        getCriticalLevel,
+        getWarningLevel,
+        colorChange,
         actions,
         actionsFor,
-        totals,
-        totalPriceAlert,
-        hasReachedWarningLevel,
-        hasReachedCriticalLevel
+        resetBtn
     }
+
+
 }
